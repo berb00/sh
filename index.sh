@@ -84,10 +84,17 @@ echo $@ 	# 与$*相同，但是使用时加引号，并在引号中返回每个�
 
 
 
+function redirect () {
+
+}
+
+:<<EOF
+
+Tips:
+    shell 语言中 0 代表 true，0 以外的值代表 false。
 
 
-
-
+EOF
 
 
 
