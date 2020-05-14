@@ -8,6 +8,13 @@ port: 4179,         //服务端口号
     verision: '4.2.36.9', //版本号
     simulation: false,  //是否模拟数据，默认为false
     eureka: {           //发现服务配置
+        // host: global.environment.eurhost || '192.168.10.240',
+        // host: global.environment.eurhost || '192.168.10.240',
+        // host: global.environment.eurhost || '192.168.10.240',
+        // host: global.environment.eurhost || '192.168.10.240',
+        // host: global.environment.eurhost || '192.168.10.240',
+        // host: global.environment.eurhost || '192.168.10.240',
+// host: global.environment.eurhost || '192.168.10.240',
         // host: global.environment.eurhost ||'192.168.10.85',
         // host: global.environment.eurhost || '192.168.10.240', //测试集成环境
 

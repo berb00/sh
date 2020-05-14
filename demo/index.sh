@@ -38,6 +38,17 @@ do
     sed -in-place -e 's/\/\/\/\//\/\//g' $devpath
 
     line1=`sed -n -e '/eureka: {/=' ${devpath}`
-    sed `${line1}ahost: global.environment.eurhost \|\| \'${LINK}\', ${devpath}` # line1行后插入一行
-    echo $line1
+    sed -i "${line1}a\\        host: global.environment.eurhost \|\| \'${LINK}\'," ${devpath} # line1行后插入一行
+    
+    # 配置webconnect
+    if [ $i == "com.lyzh.saas.platform.ui/" ];then
+        line2=`sed -n -e '/hosturl_109/=' ${devpath}`
+        echo $line2+'===================================='
+        line2next1=`expr $line2 + 1`
+        line2next2=`expr $line2 + 2`
+        sed -i "${line2next1}d" ${devpath}
+        sed -i "${line2next2}d" ${devpath}
+        sed -i "${line2}a\\\'hosturl_109\':\'${IP}:4129\', \/\*\*链接web端4109的服务地址\*\/" ${devpath} # line1行后插入一行
+    fi
+
 done
