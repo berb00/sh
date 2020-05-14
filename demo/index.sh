@@ -2,9 +2,9 @@
 
 
 path=`pwd`
-IP='192.168.8.114'
+IP='192.168.8.115'
 LINK='192.168.10.240'
-PORT='4179'
+PORT='4179' # platform port
 
 dir=`ls -d */`          # 获取所有目录名
 OLD_IFS="$IFS"
@@ -13,13 +13,21 @@ arr=($dir)
 IFS="$OLD_IFS"
 arrlen=${#arr[@]}
 
-# sed -n -e '/development/p' ./com.lyzh.saas.platform.ui/config/development.js          # 获取关键字development 所在行内容
-# sed -n -e '/development/p' ./com.lyzh.saas.platform.ui/config/development.js          # 获取关键字development 所在行行号
+if [[ $* =~ [0-9]{4} ]];then
+  port=`echo  $* | grep -Po '[0-9]{4}'`
+  PORT=${port:0:4}
+  echo $PORT
+fi
+ipre='^([1-9]|1[0-9]|1[1-9]{2}|2[0-4][0-9]|25[0-5])\.)(([0-9]{1,2}|1[1-9]{2}|2[0-4][0-9]|25[0-5])\.){2}([0-9]{1,2}|1[1-9]{2}|2[0-5][0-9]|25[0-4])$'
+ipre=''
+if [[ $* =~ (^([1-9]|1[0-9]|1[1-9]{2}|2[0-4][0-9]|25[0-5])\.)(([0-9]{1,2}|1[1-9]{2}|2[0-4][0-9]|25[0-5])\.){2}([1-9]|[1-9][0-9]|1[0-9]{2}|2[0-5][0-9]|25[0-4])$ ]];then
+  echo '22222 '
+fi
+
 
 for i in ${arr} 
 do
     devpath=${path}/${i}config/development.js
-    # echo $i
     # 配置监听port
     line=`sed -n -e '/development/=' ${devpath}`
     linenext=`expr $line + 1`
@@ -27,28 +35,52 @@ do
     if [ $i == "com.lyzh.dw.ui/" ];then
         port=`expr ${PORT} + 1`
     elif [ $i == "com.lyzh.saas.console/" ];then
-        port=`expr ${PORT} - 1`
+        port=`expr ${PORT} + 2`
+    elif [ $i == "com.lyzh.saas.console/" ];then
+        port=`expr ${PORT} + 2`  
     fi
     sed -i "${linenext}c    port: ${port},         //服务端口号" $devpath
 
     # 配置eureka
-    # sed 's/host: global/Ahost: global/g' $devpath
     sed -in-place -e 's/host: global/\/\/ host: global/g' $devpath
     sed -in-place -e 's/\/\/ \/\//\/\//g' $devpath
     sed -in-place -e 's/\/\/\/\//\/\//g' $devpath
 
     line1=`sed -n -e '/eureka: {/=' ${devpath}`
     sed -i "${line1}a\\        host: global.environment.eurhost \|\| \'${LINK}\'," ${devpath} # line1行后插入一行
-    
+
     # 配置webconnect
     if [ $i == "com.lyzh.saas.platform.ui/" ];then
-        line2=`sed -n -e '/hosturl_109/=' ${devpath}`
-        echo $line2+'===================================='
-        line2next1=`expr $line2 + 1`
-        line2next2=`expr $line2 + 2`
-        sed -i "${line2next1}d" ${devpath}
-        sed -i "${line2next2}d" ${devpath}
-        sed -i "${line2}a\\\'hosturl_109\':\'${IP}:4129\', \/\*\*链接web端4109的服务地址\*\/" ${devpath} # line1行后插入一行
-    fi
 
+        line2=`sed -n -e '/hosturl_109/=' ${devpath}`
+        if [ $lin2 ];then
+          sed -i "${line2}d" ${devpath}
+          sed -i "${line2}i\\\        'hosturl_109\':\'${IP}:${PORT}\', \/\*\*链接web端4109的服务地址\*\/" ${devpath} # line1行前插入一行
+        fi
+
+        line2=`sed -n -e '/hosturl_110/=' ${devpath}`
+        if [ $line2 ];then
+            port=`expr $PORT + 1`
+            sed -i "${line2}d" ${devpath}
+            sed -i "${line2}i\\\        'hosturl_110\':\'${IP}:${port}\', \/\*\*链接web端4110的服务地址\*\/" ${devpath} # line1行前插入一行
+        fi
+
+        line2=`sed -n -e '/hosturl_111/=' ${devpath}`
+        if [ $line2 ];then
+            port=`expr $PORT + 2`
+            sed -i "${line2}d" ${devpath}
+            sed -i "${line2}i\\\        'hosturl_111\':\'${IP}:${port}\', \/\*\*链接web端4111的服务地址\*\/" ${devpath} # line1行前插入一行
+        fi
+    fi
 done
+
+
+if [[ $* =~ '-i' ]];then
+    echo '配置完毕，开始安装packang...'
+    for i in ${arr}
+    do
+        cd $path
+        cd $i
+        npm install
+    done
+fi

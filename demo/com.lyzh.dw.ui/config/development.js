@@ -8,6 +8,14 @@ port: 4180,         //服务端口号
     verision: '4.0.4.2', //版本号
     simulation: false,  //是否模拟数据，默认为false
     eureka: {           //发现服务配置
+        host: global.environment.eurhost || '192.168.10.240',
+        // host: global.environment.eurhost || '192.168.10.240',
+        // host: global.environment.eurhost || '192.168.10.240',
+        // host: global.environment.eurhost || '192.168.10.240',
+        // host: global.environment.eurhost || '192.168.10.240',
+        // host: global.environment.eurhost || '192.168.10.240',
+        // host: global.environment.eurhost || '192.168.10.240',
+        // host: global.environment.eurhost || '192.168.10.240',
         port: 3100,
         servicePath: '/eureka/apps',
     },

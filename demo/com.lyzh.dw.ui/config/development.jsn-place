@@ -14,10 +14,7 @@ port: 4180,         //服务端口号
         // host: global.environment.eurhost || '192.168.10.240',
         // host: global.environment.eurhost || '192.168.10.240',
         // host: global.environment.eurhost || '192.168.10.240',
-// host: global.environment.eurhost || '192.168.10.240',
-
-        // host: global.environment.eurhost || '192.168.10.85', //测试集成环境
-        // host: global.environment.eurhost || '192.168.10.240', //测试集成环境
+        // host: global.environment.eurhost || '192.168.10.240',
         port: 3100,
         servicePath: '/eureka/apps',
     },

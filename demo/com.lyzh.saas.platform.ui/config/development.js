@@ -9,6 +9,8 @@ port: 4179,         //服务端口号
     simulation: false,  //是否模拟数据，默认为false
     eureka: {           //发现服务配置
         host: global.environment.eurhost || '192.168.10.240',
+        // host: global.environment.eurhost || '192.168.10.240',
+        // // host: global.environment.eurhost || '192.168.10.240',
         port: 3100,
         servicePath: '/eureka/apps',
     },
@@ -35,9 +37,9 @@ port: 4179,         //服务端口号
     mapkey: 'xBn5HPIkUrXlh0G9cbjjBSxWm6Sd6uoN',
     videoip:'http://192.168.8.165:8081',  //视频播放
     webconnect:{
-        'hosturl_109':'192.168.8.114:4129', /**链接web端4109的服务地址*/
-        'hosturl_110':'192.168.8.114:4130',   /**链接web端4110的服务地址*/
-        // 'hosturl_111':'192.168.8.165:4111',   /**链接web端4111的服务地址*/
+        'hosturl_109':'192.168.8.115:4179', /**链接web端4109的服务地址*/
+        'hosturl_110':'192.168.8.115:4180', /**链接web端4110的服务地址*/
+        'hosturl_111':'192.168.8.115:4181', /**链接web端4111的服务地址*/
     }
 };
 module.exports = config;
