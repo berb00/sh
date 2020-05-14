@@ -1,0 +1,75 @@
+'use strict';
+/**
+ * 开发环境配置文件
+ */
+var config = {
+    env: 'development', //环境名称
+port: 4189,         //服务端口号
+    verision: '4.2.36.9', //版本号
+    simulation: false,  //是否模拟数据，默认为false
+    eureka: {           //发现服务配置
+        host: global.environment.eurhost ||'192.168.10.85',
+        // host: global.environment.eurhost || '192.168.10.240', //测试集成环境
+
+
+
+
+
+
+
+
+
+        // host: global.environment.eurhost || '192.168.30.120', //开发集成环境
+        // host: global.environment.eurhost || '192.168.10.89', //测试集成环境
+        // host: globaloperationmanage.environment.eurhost || '192.168.8.150', //罗登雄
+        // host: global.environment.eurhost || '192.168.8.158', //杨阳
+        // host: global.environment.eurhost || '192.168.8.178', //朱康康
+        // host: global.environment.eurhost || '192.168.8.81', //王艳平
+        // host: global.environment.eurhost || '192.168.8.163',  //李晓飞
+        // host: global.environment.eurhost ||'192.168.8.60',    //陶海峰
+        // host: global.environment.eurhost ||'192.168.8.70', //杨仁志
+        // host: global.environment.eurhost ||'192.168.8.169', //宋愿明
+        // host: global.environment.eurhost ||'192.168.8.107', //郭行勇
+        // host: global.environment.eurhost ||'192.168.8.67',//崔彦超
+        // host: global.environment.eurhost || '192.168.8.115', //吴伟
+        //host: global.environment.eurhost || '192.168.8.112', //永恒
+		//host: global.environment.eurhost ||'192.168.8.202',//王山林
+        //host: global.environment.eurhost ||'192.168.8.193',//王荣法
+          //host: global.environment.eurhost ||'192.168.10.240',//杨硕
+        //host: global.environment.eurhost ||'192.168.10.240',//杨硕
+        //host: global.environment.eurhost ||'192.168.8.219',//江波
+        // host: global.environment.eurhost || '192.168.8.32', //陈永恒
+        // host: global.environment.eurhost ||'192.168.10.19',
+
+        port: 3100,
+        servicePath: '/eureka/apps',
+    },
+    instance: {        //当前服务器信息
+        host: '192.168.8.95',
+        name: 'PC95.lyzh.com',
+        port: 3002,   //web提供的发现服务的端口号
+        AppId: 'COM-LYZH-MSA-GW', //链接上服务的appid
+    },
+    zipkin: {
+        endpoint: 'http://192.168.30.153:9411/api/v1/spans',
+    },
+    mysql_config: {
+        //mysql数据库配置
+    },
+    mongodb_config: {
+        //mongodb数据库配置
+    },
+    redis_config: {
+        //redis数据库配置
+    },
+    domain: '.lyzhyun.com',
+    sendmobile: '13989866460',    //接收验证码手机
+    mapkey: 'xBn5HPIkUrXlh0G9cbjjBSxWm6Sd6uoN',
+    videoip:'http://192.168.8.165:8081',  //视频播放
+    webconnect:{
+        'hosturl_109':'192.168.8.114:4129', /**链接web端4109的服务地址*/
+        'hosturl_110':'192.168.8.114:4130',   /**链接web端4110的服务地址*/
+        // 'hosturl_111':'192.168.8.165:4111',   /**链接web端4111的服务地址*/
+    }
+};
+module.exports = config;
