@@ -49,6 +49,9 @@ fi
 if [ $a -le $b ]
 then
    echo "$a -le $b: a 小于或等于 b"
+elif [ $a -eq $b ]
+then
+   echo "$a -le $b: a 等于 b"
 else
    echo "$a -le $b: a 大于 b"
 fi

@@ -1,13 +1,14 @@
 'use strict';
 /**
- * 开发环境配置文件
+ * 开发环境配置文件 dw
  */
 var config = {
     env: 'development', //环境名称
-port: 4190,         //服务端口号
+    port: 4130,         //服务端口号
     verision: '4.0.4.2', //版本号
     simulation: false,  //是否模拟数据，默认为false
     eureka: {           //发现服务配置
+
         host: global.environment.eurhost || '192.168.10.85', //测试集成环境
         // host: global.environment.eurhost || '192.168.10.240', //测试集成环境
         port: 3100,

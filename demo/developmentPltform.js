@@ -4,11 +4,11 @@
  */
 var config = {
     env: 'development', //环境名称
-port: 4179,         //服务端口号
+    port: 4129,         //服务端口号
     verision: '4.2.36.9', //版本号
     simulation: false,  //是否模拟数据，默认为false
     eureka: {           //发现服务配置
-        // host: global.environment.eurhost ||'192.168.10.85',
+        host: global.environment.eurhost ||'192.168.10.85',
         // host: global.environment.eurhost || '192.168.10.240', //测试集成环境
 
 
@@ -32,12 +32,12 @@ port: 4179,         //服务端口号
         // host: global.environment.eurhost ||'192.168.8.107', //郭行勇
         // host: global.environment.eurhost ||'192.168.8.67',//崔彦超
         // host: global.environment.eurhost || '192.168.8.115', //吴伟
-        // host: global.environment.eurhost || '192.168.8.112', //永恒
-		// host: global.environment.eurhost ||'192.168.8.202',//王山林
-        // host: global.environment.eurhost ||'192.168.8.193',//王荣法
-          // host: global.environment.eurhost ||'192.168.10.240',//杨硕
-        // host: global.environment.eurhost ||'192.168.10.240',//杨硕
-        // host: global.environment.eurhost ||'192.168.8.219',//江波
+        //host: global.environment.eurhost || '192.168.8.112', //永恒
+		//host: global.environment.eurhost ||'192.168.8.202',//王山林
+        //host: global.environment.eurhost ||'192.168.8.193',//王荣法
+          //host: global.environment.eurhost ||'192.168.10.240',//杨硕
+        //host: global.environment.eurhost ||'192.168.10.240',//杨硕
+        //host: global.environment.eurhost ||'192.168.8.219',//江波
         // host: global.environment.eurhost || '192.168.8.32', //陈永恒
         // host: global.environment.eurhost ||'192.168.10.19',
 
