@@ -1,47 +1,90 @@
 #/!/bin/bash
 
+:<<EOF
+README
+  功能: 配置development.js
+       更新less (less监听需打开)
+       安装package
+  操作步骤:
+    1、将改文件拷贝至项目下 如: f-hw4web-分支-（0326数据大屏效果优化）/
+    2、在项目目录下打开gitbash
+    3、$ sh index.sh [LINK] [PORT] [-i] [-u]
+       传参都为可选 无固定顺序 以空格间隔
+       LINK: 后端IP
+       PORT: 前端端口
+       -i:安装package
+       -u:卸载package
+
+  gitbash:  https://git-scm.com/download/win
+
+EOF
 
 path=`pwd`
-IP='192.168.8.115'
-LINK='192.168.10.240'
-PORT='4179' # platform port
+LINK='192.168.10.85'      # 默认连接的后端IP
+PORT='4159'               # 默认前端端口
+                          # com.lyzh.saas.platform.ui     PORT
+                          # com.lyzh.dw.ui                PORT + 1
+                          # com.lyzh.dw.fill.ui           PORT + 2
+                          # com.lyzh.saas.console         PORT - 1
 
-dir=`ls -d */`          # 获取所有目录名
+
+# 本机IP
+ipre="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"
+ipre1="[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
+ipline=`ipconfig | grep -a 'IPv4'`
+IP=`echo $ipline | grep -Eo $ipre1`
+
+# PORT
+port=`echo  $* | grep -Eo '[0-9]{4}'`
+if [ $port ];then
+  PORT=${port:0:4}
+fi
+
+# LINK
+LINK1=`echo  $* | grep -Eo $ipre1`
+if [ $LINK1 ];then
+  LINK=$LINK1
+fi
+
+
+dir=`ls -d */`
 OLD_IFS="$IFS"
 IFS=" "
 arr=($dir)
+
+
 IFS="$OLD_IFS"
 arrlen=${#arr[@]}
+#arr=()
 
-if [[ $* =~ [0-9]{4} ]];then
-  port=`echo  $* | grep -Po '[0-9]{4}'`
-  PORT=${port:0:4}
-  echo $PORT
-fi
-ipre='^([1-9]|1[0-9]|1[1-9]{2}|2[0-4][0-9]|25[0-5])\.)(([0-9]{1,2}|1[1-9]{2}|2[0-4][0-9]|25[0-5])\.){2}([0-9]{1,2}|1[1-9]{2}|2[0-5][0-9]|25[0-4])$'
-ipre=''
-if [[ $* =~ (^([1-9]|1[0-9]|1[1-9]{2}|2[0-4][0-9]|25[0-5])\.)(([0-9]{1,2}|1[1-9]{2}|2[0-4][0-9]|25[0-5])\.){2}([1-9]|[1-9][0-9]|1[0-9]{2}|2[0-5][0-9]|25[0-4])$ ]];then
-  echo '22222 '
-fi
-
-
+# configure development.js
 for i in ${arr} 
 do
+    if [[ ! $i =~ com.lyzh ]];then
+      continue
+    fi
+
     devpath=${path}/${i}config/development.js
-    # 配置监听port
+    lesspath=${path}/${i}public/css/base.less
+
+    # update less
+    sed -i "1i\@import \"less/config\";" ${lesspath}
+    sed -i "1d" ${lesspath}
+
+    # configure port
     line=`sed -n -e '/development/=' ${devpath}`
     linenext=`expr $line + 1`
     port=$PORT
     if [ $i == "com.lyzh.dw.ui/" ];then
         port=`expr ${PORT} + 1`
-    elif [ $i == "com.lyzh.saas.console/" ];then
+    elif [ $i == "com.lyzh.dw.fill.ui/" ];then
         port=`expr ${PORT} + 2`
     elif [ $i == "com.lyzh.saas.console/" ];then
-        port=`expr ${PORT} + 2`  
+        port=`expr ${PORT} - 1`
     fi
-    sed -i "${linenext}c    port: ${port},         //服务端口号" $devpath
+    sed -i "${linenext}c \    port: ${port},         //服务端口号" $devpath
 
-    # 配置eureka
+    # configue eureka
     sed -in-place -e 's/host: global/\/\/ host: global/g' $devpath
     sed -in-place -e 's/\/\/ \/\//\/\//g' $devpath
     sed -in-place -e 's/\/\/\/\//\/\//g' $devpath
@@ -49,38 +92,73 @@ do
     line1=`sed -n -e '/eureka: {/=' ${devpath}`
     sed -i "${line1}a\\        host: global.environment.eurhost \|\| \'${LINK}\'," ${devpath} # line1行后插入一行
 
-    # 配置webconnect
-    if [ $i == "com.lyzh.saas.platform.ui/" ];then
 
+    # configure webconnect
+    if [[ $i =~ com.lyzh.saas.platform.ui/ ]];then
         line2=`sed -n -e '/hosturl_109/=' ${devpath}`
-        if [ $lin2 ];then
+        if [ $line2 ];then
           sed -i "${line2}d" ${devpath}
-          sed -i "${line2}i\\\        'hosturl_109\':\'${IP}:${PORT}\', \/\*\*链接web端4109的服务地址\*\/" ${devpath} # line1行前插入一行
         fi
 
         line2=`sed -n -e '/hosturl_110/=' ${devpath}`
         if [ $line2 ];then
-            port=`expr $PORT + 1`
             sed -i "${line2}d" ${devpath}
-            sed -i "${line2}i\\\        'hosturl_110\':\'${IP}:${port}\', \/\*\*链接web端4110的服务地址\*\/" ${devpath} # line1行前插入一行
         fi
 
         line2=`sed -n -e '/hosturl_111/=' ${devpath}`
         if [ $line2 ];then
-            port=`expr $PORT + 2`
             sed -i "${line2}d" ${devpath}
-            sed -i "${line2}i\\\        'hosturl_111\':\'${IP}:${port}\', \/\*\*链接web端4111的服务地址\*\/" ${devpath} # line1行前插入一行
         fi
+
+        line2=`sed -n -e '/webconnect/=' ${devpath}`
+        port=`expr $PORT + 2`
+        sed -i "${line2}a\\        \\'hosturl_111\\':\\'${IP}:${port}\\', /**链接web端4111的服务地址*/" ${devpath}
+#        sed -i "${line1}a\\        host: global.environment.eurhost \|\| \'${LINK}\'," ${devpath} # line1行后插入一行
+
+
+        port=`expr $PORT + 1`
+        sed -i "${line2}a\\        'hosturl_110':'${IP}:${port}', /**链接web端4110的服务地址*/" ${devpath}
+
+        port=$PORT
+        sed -i "${line2}a\\        'hosturl_109':'${IP}:${port}', /**链接web端4109的服务地址*/" ${devpath}
     fi
+    rm -f ${path}/${i}config/development.jsn-place
 done
 
-
+# install package
 if [[ $* =~ '-i' ]];then
-    echo '配置完毕，开始安装packang...'
-    for i in ${arr}
-    do
-        cd $path
-        cd $i
-        npm install
-    done
+  for i in ${arr}
+  do
+      if [[ ! $i =~ com.lyzh ]];then
+        continue
+      fi
+
+      cd $path
+      cd $i
+      npm install &
+#      sleep 10 &
+#      wait
+#      npm run run &
+  done
+  echo 'install......'
+  sleep 60
 fi
+
+# uninstall package
+if [[ $* =~ '-u' ]];then
+  for i in ${arr}
+  do
+      if [[ ! $i =~ com.lyzh ]];then
+        continue
+      fi
+
+      cd $path
+      cd $i
+      rm -rf ./node_modules  &
+  done
+  echo 'uninstall......'
+  sleep 20
+fi
+
+echo 'Done......'
+
